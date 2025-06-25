@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 // PUBLIC_INTERFACE
 @Component({
   selector: 'app-root',
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -33,7 +35,8 @@ export class AppComponent {
     this.winner = '';
     this.draw = false;
     this.infoMessage = this.mode === 'ai' ? 'Your turn (X)' : 'Player X starts';
-    if (this.mode === 'ai' && this.currentPlayer === 'O') {
+    // Defensive: Only let AI move if player type exactly 'O'
+    if (this.mode === 'ai' && (this.currentPlayer as 'X' | 'O') === 'O') {
       this.aiMove();
     }
   }
