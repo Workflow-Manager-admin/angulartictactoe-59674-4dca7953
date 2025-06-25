@@ -1,0 +1,64 @@
+<!-- Minimal, modern, responsive Tic Tac Toe game UI -->
+<div class="ttt-container">
+  <h1 class="ttt-title">Tic Tac Toe</h1>
+
+  <div class="ttt-scoreboard">
+    <div class="ttt-score" [class.active]="mode==='pvp' && currentPlayer==='X'">
+      X&nbsp;(Player 1)
+      <span class="ttt-num">{{ scoreX }}</span>
+    </div>
+    <div class="ttt-score" [class.active]="mode==='pvp' && currentPlayer==='O'">
+      O&nbsp;(Player 2<span *ngIf="mode==='ai'">/AI</span>)
+      <span class="ttt-num">{{ scoreO }}</span>
+    </div>
+    <div class="ttt-draws">
+      Draws
+      <span class="ttt-num">{{ scoreDraw }}</span>
+    </div>
+  </div>
+
+  <div class="ttt-mode-toggle">
+    <button
+      [class.selected]="mode==='pvp'"
+      (click)="setMode('pvp')"
+      type="button"
+      aria-label="Switch to two-player mode"
+    >Two Players</button>
+    <button
+      [class.selected]="mode==='ai'"
+      (click)="setMode('ai')"
+      type="button"
+      aria-label="Switch to AI mode"
+    >Play vs AI</button>
+  </div>
+
+  <div class="ttt-board" [attr.aria-label]="'Tic Tac Toe board'">
+    <button
+      *ngFor="let cell of board; let i = index"
+      class="ttt-cell"
+      [class.filled]="cell"
+      [disabled]="cell || winner || isThinking"
+      (click)="makeMove(i)"
+      [attr.aria-label]="'Cell ' + (i+1) + ', ' + (cell ? cell : 'empty')"
+    >
+      <span class="ttt-piece" [ngClass]="{'x': cell==='X', 'o': cell==='O'}">{{ cell }}</span>
+    </button>
+  </div>
+
+  <div *ngIf="winner || draw" class="ttt-message">
+    <span *ngIf="winner">Player {{ winner }} wins!</span>
+    <span *ngIf="draw && !winner">Draw!</span>
+  </div>
+  <div *ngIf="infoMessage && !(winner || draw)" class="ttt-info">
+    {{ infoMessage }}
+  </div>
+
+  <div class="ttt-actions">
+    <button type="button" (click)="resetGame()" class="ttt-action">
+      New Game
+    </button>
+    <button type="button" (click)="restartScores()" class="ttt-action secondary">
+      Reset Scores
+    </button>
+  </div>
+</div>
